@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-public abstract class Snake_Head {
+public class Snake_Head {
 	public int getPosX() {
 		return posX;
 	}
@@ -97,8 +97,17 @@ public abstract class Snake_Head {
 	public void setAbilityTimeMax(int abilityTimeMax) {
 		this.abilityTimeMax = abilityTimeMax;
 	}
-	public String getImgBase() {
-		return imgBase;
+	public String getImgBaseHead() {
+		return imgBaseHead;
+	}
+	public void setImgBaseHead(String imgBase) {
+		this.imgBaseHead = imgBase;
+	}
+	public String getImgBaseBody() {
+		return imgBaseBody;
+	}
+	public void setImgBaseBody(String imgBase) {
+		this.imgBaseBody = imgBase;
 	}
 	private int posX, posY, width, height;
 	private enum Snake_Direction {
@@ -106,14 +115,15 @@ public abstract class Snake_Head {
 	}
 	private Snake_Direction direction;
 	private int nextMoveTimer, moveSpeedTimer, bodyLength = 2, speedMultiplier;
-	private final String imgBase = "";
+	private String imgBaseHead = "Player/Head/Player_1_Snake_Head";
+	private String imgBaseBody = "Player/Head/Player_1_Snake_Body";
 	private Image img;
 	private ArrayList<Snake_Body> bodies;
 	private boolean canUseAbility = true;
 	private enum Ability_State {
-		NONE, RUNNING, TUNNELLING
+		NORMAL, RUNNING, TUNNELLING
 	}
-	private Ability_State ability = Ability_State.NONE;
+	private Ability_State ability = Ability_State.NORMAL;
 	private int abilityTime = 4500000, abilityTimeMax = 4500000;
 	
 	
@@ -124,10 +134,10 @@ public abstract class Snake_Head {
 	    g2.dispose();
 	}
 	public void updateImage() {
-		String img = imgBase + "_" + direction + "_" + ability + ".png";
 		try
 		{
-			URL url = getClass().getResource(img);
+			String imgName = imgBaseHead + "_" + direction + "_" + ability + ".png";
+			URL url = getClass().getResource(imgName);
 			setImg(ImageIO.read(url));
 		}
 		catch(Exception e)
@@ -139,7 +149,7 @@ public abstract class Snake_Head {
 	{
 		if(isCanUseAbility())
 		{
-			setAbility(a.equals(getAbility()) ? Ability_State.NONE : a);
+			setAbility(a.equals(getAbility()) ? Ability_State.NORMAL : a);
 		}
 	}
 	public void activateTunnelling() {
@@ -153,7 +163,7 @@ public abstract class Snake_Head {
 		if(getNextMoveTimer() <= 0)
 		{
 			setNextMoveTimer(getMoveSpeedTimer());
-			if(!getAbility().equals(Ability_State.NONE)) {
+			if(!getAbility().equals(Ability_State.NORMAL)) {
 				if(getAbilityTime() > 0) {
 					setAbilityTime(getAbilityTime() - getMoveSpeedTimer());
 				} else if(getAbilityTime() <= 0) {
@@ -161,11 +171,11 @@ public abstract class Snake_Head {
 					{
 						setSpeedMultiplier(getSpeedMultiplier()/3);
 					}
-					setAbility(Ability_State.NONE);
+					setAbility(Ability_State.NORMAL);
 					setCanUseAbility(false);
 				}
 			}
-			else if(getAbility().equals(Ability_State.NONE))
+			else if(getAbility().equals(Ability_State.NORMAL))
 			{
 				if(getAbilityTime() >= getAbilityTimeMax())
 				{
@@ -179,6 +189,7 @@ public abstract class Snake_Head {
 			}
 			
 			bodies.remove(0);
+			bodies.add(new Snake_Body(this, posX, posY, imgBaseBody, (!ability.name().equals("RUNNING")) ? ability.name() : "NORMAL"));
 			
 			updatePosition();
 		}
