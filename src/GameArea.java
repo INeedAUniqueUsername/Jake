@@ -27,7 +27,7 @@ public class GameArea extends JPanel implements KeyListener, Runnable {
 	int timeInterval = 25;
 	private int gameWidth;
 	private int gameHeight;
-	ArrayList<GameObject> characters;
+	ArrayList<GameObject> objects;
 /*	Food[] foodzlist;*/
 
 	public int nextInt(int max)
@@ -84,11 +84,11 @@ public class GameArea extends JPanel implements KeyListener, Runnable {
 	public void updateCharacters() {
 		int i = 0;
 		ArrayList<GameObject> dead = new ArrayList<GameObject>();
-		Iterator<GameObject> o_i_1 = characters.iterator();
+		Iterator<GameObject> o_i_1 = objects.iterator();
 		while(o_i_1.hasNext()) {
 			GameObject o_1 = o_i_1.next();
 			i++;
-			Iterator<GameObject> o_i_2 = characters.subList(i, characters.size()).iterator();
+			Iterator<GameObject> o_i_2 = objects.subList(i, objects.size()).iterator();
 			while(o_i_2.hasNext()) {
 				GameObject o_2 = o_i_2.next();
 				o_1.onCollision(o_2);
@@ -97,6 +97,9 @@ public class GameArea extends JPanel implements KeyListener, Runnable {
 			if(!o_1.getActive()) {
 				dead.add(o_1);
 			}
+		}
+		for(GameObject o : objects) {
+			objects.remove(o);
 		}
 	}
 	public void paint(Graphics window) {
