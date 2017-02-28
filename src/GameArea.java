@@ -14,6 +14,11 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import Deprecated.Enemy_Snake_Body;
+import Deprecated.Enemy_Snake_Head;
+import Deprecated.Player_Snake_Body;
+import Deprecated.Player_Snake_Head;
+
 public class GameArea extends JPanel implements KeyListener, Runnable {
 
 	//ADD SOUNDS, RESTART/QUIT, AND ENEMIES

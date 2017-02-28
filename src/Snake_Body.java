@@ -84,7 +84,7 @@ public class Snake_Body {
 	private enum Ability_State {
 		NORMAL, TUNNELLING
 	}
-	Ability_State ability = Ability_State.NORMAL;
+	Ability_State ability;
 	public Snake_Body(Snake_Head owner, int x, int y, String imgBase, String abilityState) {
 		setOwner(owner);
 		setPos(x, y);
