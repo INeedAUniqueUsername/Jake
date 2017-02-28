@@ -10,7 +10,7 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 
 
-public class Player_Snake_Head {
+public class Player_Snake_Head_DEPRECATED {
  
 	int xPos;
 	int yPos;
@@ -23,8 +23,8 @@ public class Player_Snake_Head {
 	int bodyLength = 2;
 	String img = "";
 	Image sprite;
-	Player_Snake_Body[] bodies;
-	Player_Snake_Body[] bodies2;
+	Player_Snake_Body_DEPRECATED[] bodies;
+	Player_Snake_Body_DEPRECATED[] bodies2;
 	//Use bodies.length to refer to the body length
 	int speedMultiplier;
 	boolean canUseAbility = true;
@@ -34,25 +34,25 @@ public class Player_Snake_Head {
 	boolean canTurn = true;
 
 	//default constructor
-	public Player_Snake_Head()
+	public Player_Snake_Head_DEPRECATED()
 	{
 		xPos = 16;
 		yPos = 16;
 		dir = "RIGHT";
 		speedMultiplier = 1;
-		Player_Snake_Body[] bodies = new Player_Snake_Body[2];
+		Player_Snake_Body_DEPRECATED[] bodies = new Player_Snake_Body_DEPRECATED[2];
 		moveSpeedTimer = 200;
 		nextMoveTimer = 200;
 	}
 	
 	//specific constructor
-	public Player_Snake_Head(int x, int y, String d, int sM, int bL, int mST)
+	public Player_Snake_Head_DEPRECATED(int x, int y, String d, int sM, int bL, int mST)
 	{
 		xPos = x;
 		yPos = y;
 		dir = d;
 		speedMultiplier = sM;
-		bodies = new Player_Snake_Body[bL];
+		bodies = new Player_Snake_Body_DEPRECATED[bL];
 		moveSpeedTimer = mST;
 		nextMoveTimer = mST;
 	}
@@ -83,12 +83,12 @@ public class Player_Snake_Head {
 	
 	public void increaseLength()
 	{
-		bodies2 = new Player_Snake_Body[bodies.length];
+		bodies2 = new Player_Snake_Body_DEPRECATED[bodies.length];
 		for(int i = 0; i < bodies.length; i++)
 		{
 			bodies2[i] = bodies[i];
 		}
-		bodies = new Player_Snake_Body[bodies.length + 1];
+		bodies = new Player_Snake_Body_DEPRECATED[bodies.length + 1];
 		for(int i = 1; i < bodies.length; i++)
 		{
 			bodies[i] = bodies2[i-1];
@@ -189,7 +189,7 @@ public class Player_Snake_Head {
 				}
 			}
 			
-			bodies[bodies.length - 1] = new Player_Snake_Body(xPos, yPos, abilityMode); //(bodyLengthTimer*bodies.length)/speedMultiplier, 
+			bodies[bodies.length - 1] = new Player_Snake_Body_DEPRECATED(xPos, yPos, abilityMode); //(bodyLengthTimer*bodies.length)/speedMultiplier, 
 			
 			if(dir.equals("LEFT"))
 			{

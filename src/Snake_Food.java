@@ -5,12 +5,10 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 
 
-public class Snake_Food {
+public class Snake_Food extends GameObject {
 	
 	String imgBase;
 	Image img;
-	int xPos;
-	int yPos;
 	int width = 16;
 	int height = 16;
 	public Snake_Food()
@@ -38,14 +36,10 @@ public class Snake_Food {
 			System.err.println(e);
 		}
 	}
-	public void setPos(int x, int y) {
-		xPos = x;
-		yPos = y;
-	}
 	public void draw(Graphics window)
 	{
 /*		window.setColor(Color.yellow);
 		window.fillRect(xPos, yPos, 16, 16);*/
-		window.drawImage(img, xPos, yPos, width, height, null);
+		window.drawImage(img, posX, posY, width, height, null);
 	}
 }

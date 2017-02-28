@@ -10,7 +10,7 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 
 
-public class Enemy_Snake_Head {
+public class Enemy_Snake_Head_DEPRECATED {
  
 	int xPos;
 	int yPos;
@@ -23,8 +23,8 @@ public class Enemy_Snake_Head {
 	int bodyLength = 2;
 	String img = "";
 	Image sprite;
-	Enemy_Snake_Body[] bodies;
-	Enemy_Snake_Body[] bodies2;
+	Enemy_Snake_Body_DEPRECATED[] bodies;
+	Enemy_Snake_Body_DEPRECATED[] bodies2;
 	//Use bodies.length to refer to the body length
 	int speedMultiplier;
 	boolean canUseAbility = true;
@@ -39,7 +39,7 @@ public class Enemy_Snake_Head {
 	//int[] posDiffs;
 	int horizontalDiff;
 	int verticalDiff;
-	Player_Snake_Head targetPlayer = null;
+	Player_Snake_Head_DEPRECATED targetPlayer = null;
 	Snake_Food targetFood = null;
 	String targetType = "";
 	int pathMode = 2;
@@ -47,25 +47,25 @@ public class Enemy_Snake_Head {
 	String tunnelling = "";
 
 	//default constructor
-	public Enemy_Snake_Head()
+	public Enemy_Snake_Head_DEPRECATED()
 	{
 		xPos = 16;
 		yPos = 16;
 		dir = "RIGHT";
 		speedMultiplier = 1;
-		Enemy_Snake_Body[] bodies = new Enemy_Snake_Body[2];
+		Enemy_Snake_Body_DEPRECATED[] bodies = new Enemy_Snake_Body_DEPRECATED[2];
 		moveSpeedTimer = 200;
 		nextMoveTimer = 200;
 	}
 	
 	//specific constructor
-	public Enemy_Snake_Head(int x, int y, String d, int sM, int bL, int mST, int ID)
+	public Enemy_Snake_Head_DEPRECATED(int x, int y, String d, int sM, int bL, int mST, int ID)
 	{
 		xPos = x;
 		yPos = y;
 		dir = d;
 		speedMultiplier = sM;
-		bodies = new Enemy_Snake_Body[bL];
+		bodies = new Enemy_Snake_Body_DEPRECATED[bL];
 		moveSpeedTimer = mST;
 		nextMoveTimer = mST;
 		numberID = ID;
@@ -73,12 +73,12 @@ public class Enemy_Snake_Head {
 	
 	public void increaseLength()
 	{
-		bodies2 = new Enemy_Snake_Body[bodies.length];
+		bodies2 = new Enemy_Snake_Body_DEPRECATED[bodies.length];
 		for(int i = 0; i < bodies.length; i++)
 		{
 			bodies2[i] = bodies[i];
 		}
-		bodies = new Enemy_Snake_Body[bodies.length + 1];
+		bodies = new Enemy_Snake_Body_DEPRECATED[bodies.length + 1];
 		for(int i = 1; i < bodies.length; i++)
 		{
 			bodies[i] = bodies2[i-1];
@@ -415,7 +415,7 @@ public class Enemy_Snake_Head {
 				}
 			}
 			
-			bodies[bodies.length - 1] = new Enemy_Snake_Body(xPos, yPos); //bodyLengthTimer*bodies.length)/speedMultiplier
+			bodies[bodies.length - 1] = new Enemy_Snake_Body_DEPRECATED(xPos, yPos); //bodyLengthTimer*bodies.length)/speedMultiplier
 			
 			if(dir.equals("LEFT"))
 			{

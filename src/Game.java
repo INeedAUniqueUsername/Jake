@@ -2,6 +2,8 @@ import java.awt.Component;
 
 import javax.swing.JFrame;
 
+import Deprecated.GameArea_DEPRECATED;
+
 
 public class Game extends JFrame{
 
@@ -14,14 +16,12 @@ public class Game extends JFrame{
 		
 		setSize(WIDTH, HEIGHT);
 		
-		GameArea theGame = new GameArea(this, WIDTH, HEIGHT);
+		GameArea theGame = new GameArea(WIDTH, HEIGHT);
 		((Component) theGame).setFocusable(true);
 		
 		getContentPane().add(theGame);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
-		
-		
 	}
 	
 	public static void main(String[] args) {

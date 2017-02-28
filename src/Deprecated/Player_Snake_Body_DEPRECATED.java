@@ -7,7 +7,7 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 
 
-public class Player_Snake_Body {
+public class Player_Snake_Body_DEPRECATED {
 	String img = "Player_1_Snake_Body.png";
 	Image image;
 	
@@ -21,7 +21,7 @@ public class Player_Snake_Body {
 	int height;
 	String tunnelling;
 	
-	public Player_Snake_Body(int x, int y, String tunnelMode) //int lifeTimer
+	public Player_Snake_Body_DEPRECATED(int x, int y, String tunnelMode) //int lifeTimer
 	{
 		xPos = x;
 		yPos = y;

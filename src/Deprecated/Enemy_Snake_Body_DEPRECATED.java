@@ -7,7 +7,7 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 
 
-public class Enemy_Snake_Body {
+public class Enemy_Snake_Body_DEPRECATED {
 	Image image;
 	
 	
@@ -20,7 +20,7 @@ public class Enemy_Snake_Body {
 	int height;
 	String tunnelling = "";
 	
-	public Enemy_Snake_Body(int x, int y) //int lifeTimer
+	public Enemy_Snake_Body_DEPRECATED(int x, int y) //int lifeTimer
 	{
 		xPos = x;
 		yPos = y;

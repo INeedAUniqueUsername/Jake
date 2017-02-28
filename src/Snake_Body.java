@@ -5,7 +5,7 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
-public class Snake_Body {
+public class Snake_Body extends GameObject{
 	public Snake_Head getOwner() {
 		return owner;
 	}
@@ -28,25 +28,7 @@ public class Snake_Body {
 	public void setImg(Image img) {
 		this.img = img;
 	}
-	public int getPosX() {
-		return posX;
-	}
-	public void setPosX(int posX) {
-		this.posX = posX;
-	}
-	public int getPosY() {
-		return posY;
-	}
-	public void setPosY(int posY) {
-		this.posY = posY;
-	}
-	public Point getPos() {
-		return new Point(posX, posY);
-	}
-	public void setPos(int x, int y) {
-		setPosX(x);
-		setPosY(y);
-	}
+	
 	public int getWidth() {
 		return width;
 	}
