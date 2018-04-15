@@ -5,8 +5,8 @@ import javax.swing.JFrame;
 
 public class Game extends JFrame{
 
-	private static int WIDTH = 1600;//1920;  //1920
-	private static int HEIGHT = 900;//1080;  //960
+	private static int WIDTH = 1920;//1920;  //1920
+	private static int HEIGHT = 1080;//1080;  //960
 	
 	public Game(){
 		
@@ -14,7 +14,7 @@ public class Game extends JFrame{
 		
 		setSize(WIDTH, HEIGHT);
 		
-		GameArea theGame = new GameArea(WIDTH, HEIGHT);
+		GameArea theGame = new GameArea(WIDTH-32, HEIGHT-64);
 		((Component) theGame).setFocusable(true);
 		
 		getContentPane().add(theGame);
