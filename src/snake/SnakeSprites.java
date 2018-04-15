@@ -1,6 +1,7 @@
 package snake;
 
 import java.awt.Image;
+import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -23,23 +24,26 @@ public class SnakeSprites {
 		BODY,
 		BODY_TUNNELLING,
 	};
-	protected Image[] head, body;
+	protected final Image[] head = new Image[HeadSprites.values().length], body = new Image[BodySprites.values().length];
 	public Image getHeadSprite(HeadSprites s) {
 		return head[s.ordinal()];
 	}
 	public Image getBodySprite(BodySprites s) {
 		return body[s.ordinal()];
 	}
-	public static Image load(String path) {
+	public static Image load(File f) {
+		//System.out.println(f.getAbsolutePath());
 		Image i;
 		try {
-			i = ImageIO.read(ClassLoader.getSystemClassLoader().getResource(path));
+			i = ImageIO.read(f);
 		} catch (IOException e) {
+			e.printStackTrace();
 			i = null;
 		}
 		return i;
 	}
-	public static final SnakeSprites sprites_player = new SnakeSprites() {{
+	public static final String DIR = "src/sprites/";
+	public static final SnakeSprites player = new SnakeSprites() {{
 		String[] head_path = {
 			"player_head_up.png",
 			"player_head_down.png",
@@ -50,14 +54,26 @@ public class SnakeSprites {
 			"player_head_right_tunnelling.png",
 			"player_head_left_tunnelling.png",
 		};
-		head = new Image[head_path.length];
-		for(int i = 0; i < head.length; i++) { head[i] = load(head_path[i]); }
+		for(int i = 0; i < head_path.length; i++) { head[i] = load(new File(DIR + head_path[i])); }
 		
 		String[] body_path = {
 			"player_body.png",
 			"player_body_tunnelling.png",
 		};
-		body = new Image[body_path.length];
-		for(int i = 0; i < body.length; i++) { body[i] = load(body_path[i]); }
+		for(int i = 0; i < body_path.length; i++) { body[i] = load(new File(DIR + body_path[i])); }
+	}};
+	public static final SnakeSprites enemy = new SnakeSprites() {{
+		String[] head_path = {
+			"enemy_head_up.png",
+			"enemy_head_down.png",
+			"enemy_head_right.png",
+			"enemy_head_left.png",
+		};
+		for(int i = 0; i < head_path.length; i++) { head[i] = load(new File(DIR + head_path[i])); }
+		
+		String[] body_path = {
+			"enemy_body.png",
+		};
+		for(int i = 0; i < body_path.length; i++) { body[i] = load(new File(DIR + body_path[i])); }
 	}};
 }
