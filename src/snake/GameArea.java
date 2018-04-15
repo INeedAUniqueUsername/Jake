@@ -212,8 +212,12 @@ public class GameArea extends JPanel implements KeyListener, Runnable {
 		
 		g.setFont(FONT);
 		int x = 24;
-		int y = 48;
-		g.drawString("Score: " + score, x, 48);
+		int y = 24;
+		g.drawString("Press arrow keys to turn", x, y);	y += 24;
+		g.drawString("Press Space to run", x, y);		y += 24;
+		g.drawString("Press Shift to tunnel", x, y);	y += 24;
+		g.drawString("Eat the yellow food", x, y);	y += 24;
+		g.drawString("Score: " + score, x, y);
 		y += 8;
 		g.setColor(Color.BLACK);
 		/*
@@ -279,7 +283,16 @@ public class GameArea extends JPanel implements KeyListener, Runnable {
 	public void keyTyped(KeyEvent arg0) {
 	}
 	public void onFoodEaten(SnakeHead eater, SnakeFood eaten) {
+		if(eater == player) {
+			score++;
+		}
 		objects.add(createFood());
+		if(Math.random() < 0.1 && objects.stream().filter(o -> o instanceof SnakeFood).count() < 10) {
+			objects.add(createFood());
+		}
+		if(Math.random() < 0.1 || objects.stream().filter(o -> o instanceof SnakeHeadEnemy).count() < 1) {
+			objects.add(createEnemy());
+		}
 	}
 	public void create(GameObject o) {
 		created.add(o);
