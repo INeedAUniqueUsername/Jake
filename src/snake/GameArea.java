@@ -126,7 +126,7 @@ public class GameArea extends JPanel implements KeyListener, Runnable {
 			*/
 			o.update(timeInterval);
 			if(o.getPosX() < 0 || o.getPosX() >= gameWidth || o.getPosY() < 0 || o.getPosY() >= gameHeight) {
-				o.setActive(false);
+				o.destroy();
 				i.remove();
 			}
 		}

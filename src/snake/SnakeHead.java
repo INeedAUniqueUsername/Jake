@@ -45,17 +45,18 @@ public class SnakeHead extends GameObject implements SnakeObject {
 	protected Direction direction;
 	protected int moveTimer;
 	private int moveInterval;
-	private int bodyLength = 2;
+	protected int bodyLength = 2;
 	protected double speedMultiplier;
 	private SnakeSprites sprites;
 	private LinkedList<SnakeBody> bodies;
-	private boolean abilityReady = true;
+	protected boolean abilityReady = true;
 	
 	enum Ability {
 		NONE, RUNNING, TUNNELLING
 	}
-	private Ability ability = Ability.NONE;
-	private int abilityTime = 2500, abilityTimeMax = 2500;
+	protected Ability ability = Ability.NONE;
+	private int abilityTime = 2500;
+	protected int abilityTimeMax = 2500;
 	
 	protected GameArea world;
 	
@@ -171,12 +172,6 @@ public class SnakeHead extends GameObject implements SnakeObject {
 		if(o instanceof SnakeObject) {
 			SnakeObject other = (SnakeObject) o;
 			
-			//Sometimes this happens
-			int index = bodies.indexOf(o);
-			if(index > -1 && index < 3) {
-				return;
-			}
-			
 			boolean tunnelling1 = ability == Ability.TUNNELLING;
 			boolean tunnelling2 = other.getAbility() == Ability.TUNNELLING;
 			if(tunnelling1 == tunnelling2) {
@@ -185,12 +180,12 @@ public class SnakeHead extends GameObject implements SnakeObject {
 		} else if(o instanceof SnakeFood) {
 			bodyLength++;
 			abilityTimeMax += 250;
+			speedMultiplier += 0.1;
 			o.setActive(false);
 			world.onFoodEaten(this, (SnakeFood) o);
 		}
 	}
 	public void destroy() {
-		System.out.println("destroy");
 		setActive(false);
 		bodies.forEach(b -> b.setActive(false));
 	}
@@ -244,5 +239,9 @@ public class SnakeHead extends GameObject implements SnakeObject {
 			last.setActive(false);
 		}
 		moveForward();
+	}
+	@Override
+	public SnakeHead getHead() {
+		return this;
 	}
 }

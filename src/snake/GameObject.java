@@ -40,6 +40,9 @@ public abstract class GameObject {
 	public boolean getActive() {
 		return active;
 	}
+	public void destroy() {
+		setActive(false);
+	}
 	public abstract void update(int timeInterval);
 	public abstract void draw(Graphics g);
 	public abstract void onCollision(GameObject o);

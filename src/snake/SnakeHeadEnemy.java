@@ -1,9 +1,12 @@
 package snake;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import snake.SnakeHead.Ability;
 
 public class SnakeHeadEnemy extends SnakeHead {
 	private GameObject target;
@@ -17,7 +20,48 @@ public class SnakeHeadEnemy extends SnakeHead {
 		moveTimer -= timeInterval * speedMultiplier;
 		if(moveTimer <= 0) {
 			think();
+			
+			Point nextPos = getPosDirectional(direction);
+			GameObject obstacle = null;
+			for(GameObject o : world.getObjects()) {
+				if(o.getPos().equals(nextPos) && (obstacle instanceof SnakeObject) && ((SnakeObject) obstacle).getHead() != target) {
+					obstacle = o;
+					break;
+				}
+			}
+			
+			if(target.getPos().distance(getPos()) < 2 && ability == Ability.TUNNELLING) {
+				//Resurface now to get the target
+				activateAbility(Ability.TUNNELLING);
+			} else if(obstacle != null && ability != Ability.TUNNELLING && abilityReady) {
+				//Tunnel now to avoid an obstacle
+				activateAbility(Ability.TUNNELLING);
+			} else if(ability == Ability.NONE && abilityReady) {
+				if(Math.random() < 0.2) {
+					activateAbility(Ability.TUNNELLING);
+				} else if(Math.random() < 0.4) {
+					activateAbility(Ability.RUNNING);
+				}
+			}
 			updateMove();
+		}
+	}
+	public void onCollision(GameObject o) {
+		if(o instanceof SnakeObject) {
+			SnakeObject other = (SnakeObject) o;
+			
+			boolean tunnelling1 = ability == Ability.TUNNELLING;
+			boolean tunnelling2 = other.getAbility() == Ability.TUNNELLING;
+			if(tunnelling1 == tunnelling2) {
+				destroy();
+				o.destroy();
+			}
+		} else if(o instanceof SnakeFood) {
+			bodyLength++;
+			abilityTimeMax += 250;
+			speedMultiplier += 0.1;
+			o.setActive(false);
+			world.onFoodEaten(this, (SnakeFood) o);
 		}
 	}
 	private boolean canTarget(GameObject target) {

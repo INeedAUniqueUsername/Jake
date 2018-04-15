@@ -53,4 +53,11 @@ public class SnakeBody extends GameObject implements SnakeObject {
 		}
 		*/
 	}
+	public void destroy() {
+		owner.destroy();
+	}
+	@Override
+	public SnakeHead getHead() {
+		return owner;
+	}
 }
