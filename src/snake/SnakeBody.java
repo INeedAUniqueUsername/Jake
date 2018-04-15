@@ -1,11 +1,6 @@
 package snake;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Point;
-import java.net.URL;
-
-import javax.imageio.ImageIO;
-
 import snake.SnakeHead.Ability;
 import snake.SnakeSprites.BodySprites;
 

@@ -4,7 +4,6 @@ import java.awt.Image;
 import java.awt.Point;
 import java.util.LinkedList;
 
-import snake.SnakeHead.Direction;
 import snake.SnakeSprites.HeadSprites;
 
 public class SnakeHead extends GameObject implements SnakeObject {

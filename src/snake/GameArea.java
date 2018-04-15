@@ -7,20 +7,11 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import snake.SnakeHead.Ability;
@@ -28,12 +19,9 @@ import snake.SnakeHead.Direction;
 import snake.SnakeSprites.BodySprites;
 
 public class GameArea extends JPanel implements KeyListener, Runnable {
-
-	//ADD SOUNDS, RESTART/QUIT, AND ENEMIES
-	//ADD SOUND FILES: lose.wav and eat.wav
-	
+	private static final long serialVersionUID = 1L;
 	private int score = 0;
-	private int timer = 0;
+	//private int timer = 0;
 	int timeInterval = 25;
 	private int gameWidth;
 	private int gameHeight;
@@ -60,7 +48,7 @@ public class GameArea extends JPanel implements KeyListener, Runnable {
 	}
 	
 	public void reset() {
-		timer = 0;
+		//timer = 0;
 		score = 0;
 		player = new SnakeHeadPlayer(this);
 		player.setPos(new Point(round(gameWidth/2, 16), round(gameHeight/2, 16)));
@@ -114,6 +102,7 @@ public class GameArea extends JPanel implements KeyListener, Runnable {
 		new Thread(this).start();
 
 	}
+
 	public void updateCharacters() {
 		for(Iterator<GameObject> i = objects.iterator(); i.hasNext();) {
 			GameObject o = i.next();
@@ -145,12 +134,12 @@ public class GameArea extends JPanel implements KeyListener, Runnable {
 			}
 		}
 		*/
-		List<GameObject>[][] grid = new List[gameWidth/16+4][gameHeight/16+4];
+		GameObjectList[][] grid = new GameObjectList[gameWidth/16+4][gameHeight/16+4];
 		ArrayList<List<GameObject>> collisions = new ArrayList<List<GameObject>>();
 		for(GameObject o : objects) {
 			int x = 1+o.getPosX()/16, y = 1+o.getPosY()/16;
 			if(grid[x][y] == null) {
-				collisions.add(grid[x][y] = new ArrayList<GameObject>());
+				collisions.add(grid[x][y] = new GameObjectList());
 			}
 			grid[x][y].add(o);
 		}
@@ -206,7 +195,7 @@ public class GameArea extends JPanel implements KeyListener, Runnable {
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, gameWidth, gameHeight);
 		
-		timer += 1;
+		//timer += 1;
 		//draw score
 		g.setColor(Color.black);
 		
@@ -314,4 +303,8 @@ public class GameArea extends JPanel implements KeyListener, Runnable {
 			e.printStackTrace();
 		}
 	}
+}
+class GameObjectList extends ArrayList<GameObject> {
+	private static final long serialVersionUID = 1L;
+	
 }

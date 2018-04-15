@@ -6,8 +6,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import snake.SnakeHead.Ability;
-
 public class SnakeHeadEnemy extends SnakeHead {
 	private GameObject target;
 	enum DirectionType {
@@ -141,7 +139,7 @@ public class SnakeHeadEnemy extends SnakeHead {
 	}
 	*/
 	private void think(boolean horizontalAllowed, boolean verticalAllowed) {
-		System.out.println("think");
+		//System.out.println("think");
 		
 		int xDiff = target.getPosX() - posX, yDiff = target.getPosY() - posY;
 		int xDist = Math.abs(xDiff), yDist = Math.abs(yDiff);
