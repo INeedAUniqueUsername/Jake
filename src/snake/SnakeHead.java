@@ -1,30 +1,26 @@
 package snake;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Point;
 import java.util.LinkedList;
 
+import snake.SnakeHead.Direction;
 import snake.SnakeSprites.HeadSprites;
 
-public class SnakeHead extends GameObject {
-	public int getWidth() {
-		return width;
-	}
-	public int getHeight() {
-		return height;
-	}
-	public SnakeDirection getDirection() {
+public class SnakeHead extends GameObject implements SnakeObject {
+	public Direction getDirection() {
 		return direction;
 	}
-	public int getNextMoveTimer() {
-		return nextMoveTimer;
+	public int getMoveTimer() {
+		return moveTimer;
 	}
-	public int getMoveSpeedTimer() {
-		return moveSpeedTimer;
+	public int getMoveInterval() {
+		return moveInterval;
 	}
 	public int getBodyLength() {
 		return bodyLength;
 	}
-	public int getSpeedMultiplier() {
+	public double getSpeedMultiplier() {
 		return speedMultiplier;
 	}
 	public SnakeSprites getSprites() {
@@ -33,7 +29,7 @@ public class SnakeHead extends GameObject {
 	public LinkedList<SnakeBody> getBodies() {
 		return bodies;
 	}
-	public AbilityMode getAbility() {
+	public Ability getAbility() {
 		return ability;
 	}
 	public int getAbilityTime() {
@@ -42,25 +38,39 @@ public class SnakeHead extends GameObject {
 	public int getAbilityTimeMax() {
 		return abilityTimeMax;
 	}
-	public void setAbilityTimeMax(int abilityTimeMax) {
-		this.abilityTimeMax = abilityTimeMax;
-	}
-	private int posX, posY, width, height;
-	private enum SnakeDirection {
+	private int width = 16, height = 16;
+	public enum Direction {
 		RIGHT, UP, LEFT, DOWN
 	}
-	private SnakeDirection direction;
-	private int nextMoveTimer, moveSpeedTimer, bodyLength = 2, speedMultiplier;
+	protected Direction direction;
+	protected int moveTimer;
+	private int moveInterval;
+	private int bodyLength = 2;
+	protected double speedMultiplier;
 	private SnakeSprites sprites;
 	private LinkedList<SnakeBody> bodies;
 	private boolean abilityReady = true;
 	
-	enum AbilityMode {
+	enum Ability {
 		NONE, RUNNING, TUNNELLING
 	}
-	private AbilityMode ability = AbilityMode.NONE;
-	private int abilityTime = 4500000, abilityTimeMax = 4500000;
+	private Ability ability = Ability.NONE;
+	private int abilityTime = 2500, abilityTimeMax = 2500;
 	
+	protected GameArea world;
+	
+	public SnakeHead(GameArea world, SnakeSprites sprites) {
+		this.world = world;
+		
+		ability = Ability.NONE;
+		direction = Direction.RIGHT;
+		
+		this.sprites = sprites;
+		
+		moveTimer = moveInterval = 150;
+		speedMultiplier = 1;
+		bodies = new LinkedList<>();
+	}
 	
 	public void draw( Graphics window )
 	{
@@ -73,7 +83,7 @@ public class SnakeHead extends GameObject {
 			s = HeadSprites.DOWN;
 			break;
 		case RIGHT:
-			s = HeadSprites.UP;
+			s = HeadSprites.RIGHT;
 			break;
 		case LEFT:
 			s = HeadSprites.LEFT;
@@ -91,72 +101,148 @@ public class SnakeHead extends GameObject {
 		Image i = sprites.getHeadSprite(s);
 	    window.drawImage(i, posX, posY, width, height, null);  
 	}
-	public void activateAbility(AbilityMode a)
+	public void activateAbility(Ability activate)
 	{
-		if(abilityReady)
-		{
-			switch(ability) {
-			case NONE:
-				ability = a;
-				break;
-			default:
-				ability = AbilityMode.NONE;
-				break;
+		if(abilityReady) {
+			if(ability != Ability.NONE) {
+				abilityTime = Math.max(0, abilityTime - 600);
+			}
+			if(ability == activate) {
+				stopAbility();
+			} else {
+				stopAbility();
+				startAbility(activate);
 			}
 		}
 	}
-	public void activateRunning() {
+	private void startAbility(Ability next) {
+		if(ability == next) return;
+		ability = next;
+		switch(ability) {
+		case RUNNING:
+			startRunning();
+			break;
+		default:
+			break;
+		}
+	}
+	private void stopAbility() {
+		switch(ability) {
+		case RUNNING:
+			stopRunning();
+			break;
+		default:
+			break;
+		}
+		ability = Ability.NONE;
+	}
+	public void startRunning() {
 		speedMultiplier *= 3;
 	}
-	public void deactivateRunning() {
+	public void stopRunning() {
 		speedMultiplier /= 3;
 	}
-	public void move(){
-		
-		if(nextMoveTimer <= 0)
-		{
-			nextMoveTimer = moveSpeedTimer;
-			switch(ability) {
-			case NONE:
-				if(abilityTime >= abilityTimeMax) {
-					abilityReady = true;
-					abilityTime = abilityTimeMax;
-				} else {
-					abilityTime += moveSpeedTimer;
-				}
-				break;
-			default:
-				if(abilityTime > 0) {
-					abilityTime -= moveSpeedTimer;
-				} else {
-					if(ability.equals(AbilityMode.RUNNING)) {
-						deactivateRunning();
-					}
-					ability = AbilityMode.NONE;
-					abilityReady = false;
-				}
-				break;
-			}
-			
-			bodies.removeFirst();
-			bodies.addLast(new SnakeBody(this, posX, posY, ability));
-			updatePosition();
+	public void moveForward() {
+		setPos(getPosDirectional(direction));
+	}
+	public Point getPosDirectional(Direction d) {
+		switch(d) {
+		case UP:
+			return new Point(posX, posY - height);
+		case DOWN:
+			return new Point(posX, posY + height);
+		case RIGHT:
+			return new Point(posX + width, posY);
+		case LEFT:
+			return new Point(posX - width, posY);
+		default:
+			return getPos();
 		}
 	}
-	public void updatePosition() {
-		switch(direction) {
-		case LEFT :
-			setPosX(posX - width);
+	public boolean directionCheck(Direction d) {
+		/*
+		System.out.println(bodies.getFirst().getPos());
+		System.out.println(getPosDirectional(d));
+		*/
+		return !bodies.getFirst().getPos().equals(getPosDirectional(d));
+	}
+	@Override
+	public void onCollision(GameObject o) {
+		if(o instanceof SnakeObject) {
+			SnakeObject other = (SnakeObject) o;
+			
+			//Sometimes this happens
+			int index = bodies.indexOf(o);
+			if(index > -1 && index < 3) {
+				return;
+			}
+			
+			boolean tunnelling1 = ability == Ability.TUNNELLING;
+			boolean tunnelling2 = other.getAbility() == Ability.TUNNELLING;
+			if(tunnelling1 == tunnelling2) {
+				destroy();
+			}
+		} else if(o instanceof SnakeFood) {
+			bodyLength++;
+			abilityTimeMax += 250;
+			o.setActive(false);
+			world.onFoodEaten(this, (SnakeFood) o);
+		}
+	}
+	public void destroy() {
+		System.out.println("destroy");
+		setActive(false);
+		bodies.forEach(b -> b.setActive(false));
+	}
+	@Override
+	public void update(int timeInterval) {
+		moveTimer -= timeInterval * speedMultiplier;
+		if(moveTimer <= 0) {
+			updateMove();
+		}
+	}
+	public void updateMove() {
+		moveTimer = moveInterval;
+		switch(ability) {
+		case NONE:
+			if(abilityTime >= abilityTimeMax) {
+				abilityReady = true;
+				abilityTime = abilityTimeMax;
+			} else {
+				abilityTime += moveInterval;
+			}
 			break;
-		case RIGHT :
-			setPosX(posX + width);
-			break;
-		case UP :
-			setPosY(posY - height);
-			break;
-		case DOWN :
-			setPosY(posY + height);
+		default:
+			System.out.println("Running");
+			if(abilityTime > 0) {
+				abilityTime -= moveInterval;
+				/*
+				//Smooth running speed test
+				if(ability == Ability.RUNNING) {
+					int decelTime = (int) (moveInterval * ((speedMultiplier - 1.0)/0.4));
+					if(decelTime < abilityTime) {
+						speedMultiplier -= 0.4;
+					} else {
+						speedMultiplier += 0.4;
+					}
+				}
+				*/
+			} else {
+				if(ability.equals(Ability.RUNNING)) {
+					stopRunning();
+				}
+				ability = Ability.NONE;
+				abilityReady = false;
+			}
 			break;
 		}
+		SnakeBody b = new SnakeBody(this, posX, posY, ability);
+		bodies.addFirst(b);
+		world.create(b);
+		while(bodies.size() > bodyLength) {
+			SnakeBody last = bodies.removeLast();
+			last.setActive(false);
+		}
+		moveForward();
 	}
 }
